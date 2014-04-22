@@ -15,6 +15,7 @@ end
 name = ARGV[ 1 ]
 
 files = []
+i = 1
 
 for f in Dir[ "#{dir}/*" ]
   next unless File.file?( f )
@@ -33,16 +34,21 @@ for f in Dir[ "#{dir}/*" ]
     :file => f,
     :time => date
   } )
+
+  if i % 10 == 0
+    puts "exif read of #{i} files."
+  end
+
+  i += 1
 end
 
+puts "finished reading exif data of #{files.length} files."
 files.sort! { |f1,f2| f1[ :time ] <=> f2[ :time ] }
-
-# puts "files = #{files.inspect}"
 
 i = 1
 
 for f in files
-  File.rename( f[ :file ], "#{dir}/#{name}_#{i}.jpg" )
+  File.rename( f[ :file ], "#{dir}/#{name}_#{i}_#{f[ :time ].strftime( "%d%m%Y_%H%M" )}.jpg" )
 
   i += 1
 end
