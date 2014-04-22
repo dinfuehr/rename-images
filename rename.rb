@@ -46,9 +46,12 @@ puts "finished reading exif data of #{files.length} files."
 files.sort! { |f1,f2| f1[ :time ] <=> f2[ :time ] }
 
 i = 1
+maxlen = files.length.to_s.length
 
 for f in files
-  File.rename( f[ :file ], "#{dir}/#{name}_#{i}_#{f[ :time ].strftime( "%d%m%Y_%H%M" )}.jpg" )
+  ifmt = "%0#{maxlen}d" % i
+  timefmt = f[ :time ].strftime( "%d%m%Y_%H%M" )
+  File.rename( f[ :file ], "#{dir}/#{ifmt}_#{name}_#{timefmt}.jpg" )
 
   i += 1
 end
